@@ -25,6 +25,7 @@ jobs:
       - name: Build Kernel
         uses: dabao1955/kernel_build_action@main
         with:
+          bootimg-url: https://raw.githubusercontent.com/noonomyen/camellian-linux/master/images/boot.stock.img
           kernel-url: ./camellian-t-oss/
           config: camellian_gl_base_defconfig
           arch: arm64
@@ -56,6 +57,7 @@ jobs:
       - name: Build Kernel & Publish Release
         uses: dabao1955/kernel_build_action@main
         with:
+          bootimg-url: https://raw.githubusercontent.com/noonomyen/camellian-linux/master/images/boot.stock.img
           kernel-url: ./camellian-t-oss/
           config: camellian_gl_base_defconfig
           arch: arm64
