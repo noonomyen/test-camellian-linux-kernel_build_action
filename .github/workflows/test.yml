@@ -1,0 +1,70 @@
+name: kernel_build_action
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build-artifact:
+    name: Build - Artifact
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          repository: noonomyen/camellian-linux
+          ref: 2-support-building-with-dabao1955kernel_build_action
+          submodules: false
+
+      - name: Apply Clang LTO Linker Patch
+        run: |
+          patch -p1 < patches/0002-force-link-ld-lld-lto.patch
+
+      - name: Build Kernel
+        uses: dabao1955/kernel_build_action@main
+        with:
+          kernel-url: ./camellian-t-oss/
+          config: camellian_gl_base_defconfig
+          arch: arm64
+          aosp-clang: true
+          aosp-clang-version: r383902
+          aosp-gcc: true
+          android-version: 11
+          disable-lto: false
+          anykernel3: true
+          ccache: true
+
+  build-release:
+    name: Build - Release
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          repository: noonomyen/camellian-linux
+          ref: 2-support-building-with-dabao1955kernel_build_action
+          submodules: false
+
+      - name: Apply Clang LTO Linker Patch
+        run: |
+          patch -p1 < patches/0002-force-link-ld-lld-lto.patch
+
+      - name: Build Kernel & Publish Release
+        uses: dabao1955/kernel_build_action@main
+        with:
+          kernel-url: ./camellian-t-oss/
+          config: camellian_gl_base_defconfig
+          arch: arm64
+          aosp-clang: true
+          aosp-clang-version: r383902
+          aosp-gcc: true
+          android-version: 11
+          disable-lto: false
+          anykernel3: true
+          ccache: true
+          release: true
+          access-token: ${{ secrets.GITHUB_TOKEN }}
