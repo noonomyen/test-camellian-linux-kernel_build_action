@@ -33,7 +33,7 @@ jobs:
           aosp-gcc: true
           android-version: 11
           disable-lto: false
-          anykernel3: true
+          anykernel3: false
           ccache: true
 
   build-release:
@@ -64,7 +64,7 @@ jobs:
           aosp-gcc: true
           android-version: 11
           disable-lto: false
-          anykernel3: true
+          anykernel3: false
           ccache: true
           release: true
           access-token: ${{ secrets.GITHUB_TOKEN }}
